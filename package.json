@@ -1,0 +1,29 @@
+{
+  "name": "wichtel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "watch": "tsx src/server.ts watch src",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:init": "npx prisma migrate dev --name init",
+    "prisma:generate": "npx prisma generate",
+    "prisma:studio": "npx prisma studio -n 0.0.0.0 -p 5555"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "youch": "^3.3.4",
+    "prisma": "^6.0.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1"
+  }
+}

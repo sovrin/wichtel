@@ -1,0 +1,35 @@
+services:
+  app:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: "production"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start
+
+  studio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: "production"
+    expose:
+      - "5555"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run prisma:studio
+
+  caddy:
+    image: caddy:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    env_file: ".env"
