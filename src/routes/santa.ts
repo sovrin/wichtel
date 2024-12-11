@@ -9,24 +9,26 @@ santa.get('/', (req, res) => {
 });
 
 santa.get('/:year/:group', async (req, res) => {
-    const {group, year} = req.params;
-    const id = req.query.id as string;
-
-    const participant = await getParticipantById(id);
-    if (!participant) {
-        return res.render('pages/santa/unknownParticipant');
-    }
-
-    if (participant.group.name !== group) {
-        return res.render('pages/santa/notGroupOf', {
-            group,
-            participant
-        });
-    }
-
-    const {name: giver} = participant;
-
     try {
+        const {group, year} = req.params;
+        const id = req.query.id as string;
+        if (!id) {
+            return res.render('404');
+        }
+
+        const participant = await getParticipantById(id);
+        if (!participant) {
+            return res.render('pages/santa/unknownParticipant');
+        }
+
+        if (!participant.groups.find((entry) => entry.name === group) === undefined) {
+            return res.render('pages/santa/notGroupOf', {
+                group,
+                participant
+            });
+        }
+
+        const {name: giver} = participant;
         const pairs = await getSantaPairs(group, parseInt(year, 10));
         const receiver = pairs.get(giver);
 
@@ -37,9 +39,10 @@ santa.get('/:year/:group', async (req, res) => {
             receiver,
         });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error(error.message);
 
-        console.error(error);
+        return res.status(500)
+            .render('500')
     }
 })
 

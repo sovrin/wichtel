@@ -66,7 +66,28 @@ export const getSantaPairs = async (group: string, year: number): Promise<Secret
     }
 
     const participantsNames = participants.map((participant) => participant.name);
+    const exclusions = participants.reduce((acc, participant) => {
+        acc[participant.name] = participant.excludes.map((exclude) => exclude.name);
+
+        return acc;
+    }, {});
     const seed = parseInt(String(GENERATOR_SEED)) + year;
 
-    return generateSecretSantaPairs(participantsNames, {}, seed);
+    return generateSecretSantaPairs(participantsNames, exclusions, seed);
+}
+
+export const generateLinks = async (group: string, year: number): Promise<{name: string, link: string}[]> => {
+    const participants = await getParticipantsForGroup(group);
+    if (participants.length === 0) {
+        return [];
+    }
+
+    return participants.map(({id, name}) => {
+        const link = `${year}/${group}?id=${id}`;
+
+        return {
+            name,
+            link
+        }
+    });
 }

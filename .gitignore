@@ -1,6 +1,7 @@
 .idea
 node_modules
 prisma/*.sqlite
+prisma/migrations
 
 .env
 package-lock.json

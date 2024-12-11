@@ -1,0 +1,16 @@
+<article>
+    <header class="tc pa1">
+        <h1>Wichteln - {{year}}</h1>
+        <p>Gruppe: <span class="b">{{group}}</span></p>
+    </header>
+
+    <h2>Personalisierte links:</h2>
+
+    <div class="links">
+        {{#each links}}
+            <div class="link">
+                Link für: <a href="{{link}}" class="dim">{{name}}</a>
+            </div>
+        {{/each}}
+    </div>
+</article>
