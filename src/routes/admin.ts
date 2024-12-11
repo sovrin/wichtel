@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {generateLinks} from "../services/santa";
+import {generateLinks, getSantaPairs} from "../services/santa";
 import basicAuth from "express-basic-auth";
 import {BASIC_AUTH_USERNAME, BASIC_AUTH_PASSWORD} from "../const";
 import {getGoupByName} from "../models/groups";
@@ -14,6 +14,29 @@ admin.use(
         },
     })
 )
+
+admin.get('/pairs/:year/:group', async (req, res) => {
+    const {params} = req;
+    const {group: groupName, year} = params;
+    const group = await getGoupByName(groupName);
+
+    try {
+        const pairs = await getSantaPairs(group, parseInt(year, 10));
+        const list = Array.from(pairs.entries())
+            .map(([key, value]) => `${key} -> ${value}`);
+
+        res.render('pages/admin/pairs', {
+            pairs: list,
+            year,
+            group,
+        });
+    } catch (error) {
+        console.error(error.message);
+
+        return res.status(500)
+            .render('500')
+    }
+});
 
 admin.get('/links/:year/:group', async (req, res) => {
     const {params} = req;

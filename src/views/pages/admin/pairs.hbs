@@ -1,0 +1,15 @@
+<article>
+    <header class="tc pa1">
+        <h1>Wichteln - {{year}}</h1>
+        <p>Gruppe: <span class="b">{{group.name}}</span></p>
+    </header>
+
+    <h2>Paare:</h2>
+    <ul>
+        {{#each pairs}}
+            <li>
+                {{this}}
+            </li>
+        {{/each}}
+    </ul>
+</article>
