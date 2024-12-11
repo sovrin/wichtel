@@ -63,6 +63,7 @@ admin.get('/links/:year/:group', async (req, res) => {
         }
 
         res.render('pages/admin/links', {
+            year,
             links,
             group,
         });

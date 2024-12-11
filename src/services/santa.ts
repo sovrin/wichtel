@@ -84,7 +84,7 @@ export const generateLinks = async (group: Group, year: number): Promise<{ name:
     }
 
     return participants.map(({id, name}) => {
-        const link = `${year}/${group}?id=${id}`;
+        const link = `${year}/${group.name}?id=${id}`;
 
         return {
             name,
