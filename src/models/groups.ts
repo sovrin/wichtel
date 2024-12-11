@@ -4,20 +4,10 @@ export const getGroups = async () => {
     return prisma.group.findMany();
 }
 
-export const createGroup = async (name: string): Promise<unknown> => {
-    return prisma.group.create({
-        data: {
+export const getGoupByName = async (name: string) => {
+    return prisma.group.findFirst({
+        where: {
             name
         }
     });
 }
-
-export const deleteGroup = async (id: string): Promise<unknown> => {
-    return prisma.group.delete({
-        where: {
-            id
-        }
-    });
-}
-
-

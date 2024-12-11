@@ -1,27 +1,44 @@
 import {Router} from "express";
-import {getParticipantById} from "../models/participants";
+import {getParticipantById, getParticipantsForGroup} from "../models/participants";
 import {getSantaPairs} from "../services/santa";
+import {getGoupByName} from "../models/groups";
+import {formatDate} from "../utils/date";
 
 const santa = Router();
 
-santa.get('/', (req, res) => {
+santa.get('/', (_req, res) => {
     res.render('index');
 });
 
 santa.get('/:year/:group', async (req, res) => {
+    const {params, query} = req;
+    const {group: groupName, year} = params;
+    const {id} = query;
+
     try {
-        const {group, year} = req.params;
-        const id = req.query.id as string;
-        if (!id) {
-            return res.render('404');
+        const group = await getGoupByName(groupName);
+        if (!group) {
+            return res.render('pages/santa/unknownGroup', {
+                group: groupName,
+            });
         }
 
-        const participant = await getParticipantById(id);
+        if (!id) {
+            const participants = await getParticipantsForGroup(group);
+
+            return res.render('pages/santa/participants', {
+                group,
+                year,
+                participants
+            });
+        }
+
+        const participant = await getParticipantById(String(id));
         if (!participant) {
             return res.render('pages/santa/unknownParticipant');
         }
 
-        if (!participant.groups.find((entry) => entry.name === group) === undefined) {
+        if (!participant.groups.find((entry) => entry.name === group.name) === undefined) {
             return res.render('pages/santa/notGroupOf', {
                 group,
                 participant
@@ -33,6 +50,7 @@ santa.get('/:year/:group', async (req, res) => {
         const receiver = pairs.get(giver);
 
         res.render('pages/santa/assignment', {
+            deadLine: formatDate(new Date(`${year}-${group.deadline}`)),
             year,
             group,
             giver,

@@ -1,4 +1,5 @@
 import {prisma} from '../services/database';
+import {Group} from "@prisma/client";
 
 export const getParticipantById = async (id: string) => {
     return prisma.participant.findUnique({
@@ -11,17 +12,7 @@ export const getParticipantById = async (id: string) => {
     });
 }
 
-export const getParticipantsForGroup = async (name: string) => {
-    const groupId = await prisma.group.findUnique({
-        where: {
-            name
-        }
-    });
-
-    if (!groupId) {
-        throw new Error(`Group with name ${name} not found`);
-    }
-
+export const getParticipantsForGroup = async (group: Group) => {
     return prisma.participant.findMany({
         include: {
             excludes: true,
@@ -29,7 +20,7 @@ export const getParticipantsForGroup = async (name: string) => {
         where: {
             groups: {
                 some: {
-                    id: groupId.id
+                    id: group.id
                 }
             }
         }

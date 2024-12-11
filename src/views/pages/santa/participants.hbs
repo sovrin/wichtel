@@ -1,0 +1,19 @@
+<article class="relative overflow-hidden">
+    <header class="tc pa1">
+        <h1>Wichteln - {{year}}</h1>
+    </header>
+
+    <div class="rules">
+        <h2>Teilnehmerübersicht 🎄</h2>
+        <p>Hier sind alle bisher eingetragenen Teilnehmer der Gruppe {{group.name}}:</p>
+        <ul>
+            {{#each participants}}
+                <li>{{name}}</li>
+            {{/each}}
+        </ul>
+
+        {{> ball}}
+
+    </div>
+    <p>Viel Spaß beim Wichteln! 😊</p>
+</article>

@@ -1,6 +1,7 @@
 import {xorShift} from "../utils/math";
 import {getParticipantsForGroup} from "../models/participants";
 import {GENERATOR_SEED} from "../const";
+import {Group} from "@prisma/client";
 
 type SecretSantaPairs = Map<string, string>;
 type Exclusions = Record<string, string[]>;
@@ -59,7 +60,7 @@ export const generateSecretSantaPairs = (
 };
 
 
-export const getSantaPairs = async (group: string, year: number): Promise<SecretSantaPairs> => {
+export const getSantaPairs = async (group: Group, year: number): Promise<SecretSantaPairs> => {
     const participants = await getParticipantsForGroup(group);
     if (participants.length === 0) {
         return new Map<string, string>();
@@ -76,7 +77,7 @@ export const getSantaPairs = async (group: string, year: number): Promise<Secret
     return generateSecretSantaPairs(participantsNames, exclusions, seed);
 }
 
-export const generateLinks = async (group: string, year: number): Promise<{name: string, link: string}[]> => {
+export const generateLinks = async (group: Group, year: number): Promise<{ name: string, link: string }[]> => {
     const participants = await getParticipantsForGroup(group);
     if (participants.length === 0) {
         return [];

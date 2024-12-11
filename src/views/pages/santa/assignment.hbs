@@ -1,7 +1,7 @@
-<article>
+<article class="relative overflow-hidden">
     <header class="tc pa1">
         <h1>Wichteln - {{year}}</h1>
-        <p>Gruppe: <span class="b">{{group}}</span></p>
+        <p>Gruppe: <span class="b">{{group.name}}</span></p>
     </header>
 
     <h2>Hallo, <span class="highlight">{{giver}}</span>! 🎄</h2>
@@ -11,11 +11,14 @@
     <div class="rules">
         <h2>Rahmenbedingungen:</h2>
         <ul>
-            <li>Der Preis des Geschenks sollte nicht teurer als <strong>30 Euro</strong> sein.</li>
-            <li>Das Geschenk sollte am <span class="b">25.12.{{year}}</span> übergeben werden.</li>
+            <li>Der Preis des Geschenks sollte nicht teurer als <strong>{{group.value}} Euro</strong> sein.</li>
+            <li>Das Geschenk sollte am <span class="b">{{deadLine}}</span> übergeben werden.</li>
             <li>Bitte halte dein Geschenk geheim, bis es Zeit ist, es zu übergeben.</li>
             <li>Sei kreativ und denke an die Vorlieben von {{receiver}}!</li>
         </ul>
+
+        {{> ball}}
+
     </div>
     <p>Viel Spaß beim Wichteln! 😊</p>
 </article>

@@ -13,7 +13,12 @@ app.engine('hbs', engine({
     defaultLayout: 'index',
     extname: 'hbs',
     helpers: {
-        json: (context: never) => JSON.stringify(context),
+        json: (context: object) => JSON.stringify(context),
+        random: (context: string, from: number, to: number) => {
+            const value = Math.floor(Math.random() * (to - from) + from);
+
+            return context.replace(/%d/, value.toString());
+        },
     }
 }));
 app.set('views', path.join(__dirname, 'views'))

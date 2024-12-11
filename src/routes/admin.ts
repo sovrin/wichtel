@@ -2,6 +2,7 @@ import {Router} from "express";
 import {generateLinks} from "../services/santa";
 import basicAuth from "express-basic-auth";
 import {BASIC_AUTH_USERNAME, BASIC_AUTH_PASSWORD} from "../const";
+import {getGoupByName} from "../models/groups";
 
 const admin = Router();
 
@@ -15,12 +16,16 @@ admin.use(
 )
 
 admin.get('/links/:year/:group', async (req, res) => {
+    const {params} = req;
+    const {group: groupName, year} = params;
+
     try {
         const fullUrl = req.protocol + '://' + req.get('host');
 
-        const {group, year} = req.params;
-        if(!group) {
-            return res.render('404');
+        const group = await getGoupByName(groupName);
+        if (!group) {
+            return res.status(404)
+                .render('404');
         }
 
         const links = (await generateLinks(group, parseInt(year)))
@@ -30,14 +35,15 @@ admin.get('/links/:year/:group', async (req, res) => {
             }));
 
         if (!links) {
-            return res.render('404');
+            return res.status(404)
+                .render('404');
         }
 
         res.render('pages/admin/links', {
             links,
             group,
         });
-    }  catch (error) {
+    } catch (error) {
         console.error(error.message);
 
         return res.status(500)
